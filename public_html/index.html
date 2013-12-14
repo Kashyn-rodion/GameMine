@@ -13,41 +13,63 @@
 	<script src="js/menu.js"></script>
         <script src="js/GameFunc.js"></script>
     <script>
-			
-		//var Map = new CMap(4,1);
-		//Map.blocs = ['bl','bl','bl','bl'];
-                var targetRate = 200;
+		var CellSize = 50;	
+                var Game;
+	        var targetRate = 200;
+   Game=LoadState();
+                if(Game==null)
+                {
 		var Map = new CMap(10,10);
 Map.blocs = [[0 ,1 ,1 ,2 ,1 ,1 ,1 ,1 ,1 ,1 ],[1 ,3 ,1 ,2 ,1 ,1 ,1 ,1 ,1 ,1 ],[1 ,2 ,2 ,2 ,1 ,1 ,1 ,1 ,3 ,1 ],[1 ,1 ,1 ,1 ,2 ,2 ,2 ,2 ,1 ,1 ],[1 ,3 ,4 ,1 ,2 ,1 ,1 ,1 ,4 ,1 ],[1 ,1 ,1 ,1 ,2 ,3 ,1 ,1 ,1 ,1 ],[2 ,2 ,1 ,1 ,2 ,1 ,1 ,1 ,1 ,1 ],[4 ,2 ,1 ,3 ,1 ,1 ,1 ,2 ,1 ,1 ],[1 ,1 ,1 ,1 ,2 ,2 ,2 ,2 ,1 ,1 ],[1 ,2 ,2 ,1 ,1 ,1 ,1 ,1 ,1 ,5 ]];
 		
 		var Player = new CPlayer(0,0);
-		var targetX=Player.x, targetY=Player.y;
-                
-              	
-                
+		//var targetX=Player.x, targetY=Player.y;
+                Game = new CGameInfo(Player,Map);
+              
+    
+     }
+     
+         var targetX=Game.Player.x, targetY=Game.Player.y;
+              
 var example = document.getElementById('example');
 var m_canv = document.getElementById('menu_canv');
 var menu = new CMenu();
 //DrawMap(Map,example,Player);
 //DrawPlayer(Player,50,example);
-tID = setInterval(function(){PaintFrame();}, 400);
+tID = setInterval(function(){PaintFrame(CellSize, Game);}, 400);
 		
 		//DrawMap(Map,example);
 		//DrawPlayer(Player,50,example);
+     
+    $(document.example).on("touchend", function(e) {
+       e.changedTouches[0].pageX;
+       var x = offset.left;
+       var y = offset.top;
+       targetX = parseInt((e.changedTouches[0].pageX-x)/CellSize);
+       targetY = parseInt((e.changedTouches[0].pageY-y)/CellSize);
+        });
+      
       $('#example').click(function(eventObject)
 		{
 			var offset = jQuery('#example').offset();
 			var x = offset.left;
 			var y = offset.top;
-			targetX = parseInt((eventObject.pageX-x)/50);
-			targetY = parseInt((eventObject.pageY-y)/50);
+			targetX = parseInt((eventObject.pageX-x)/CellSize);
+			targetY = parseInt((eventObject.pageY-y)/CellSize);
 		});
+      $(document.menu_canv).on("touchend", function(e) {
+                        var offset = jQuery('#example').offset();
+			var x = offset.left;
+			var y = offset.top;
+			OnClic((e.changedTouches[0].pageX-x), (e.changedTouches[0].pageY-y),menu);
+        });
 	$('#menu_canv').click(function(eventObject)
 		{
 			var offset = jQuery('#example').offset();
 			var x = offset.left;
 			var y = offset.top;
-			OnClic((eventObject.pageX-x), (eventObject.pageY-y),menu);
+			
+                        OnClic((eventObject.pageX-x), (eventObject.pageY-y),menu,Game);
 		});
 			
     </script>

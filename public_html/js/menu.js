@@ -45,11 +45,12 @@ function DrawMenu(wnd, player, menu, x, y, w, h)
 	menu.mx = cur;
 	menu.my = y;
 }
-function OnClic(x,y,menu)//функция обработки нажатия на кнопку меню (вызывается в основном коде при помощи jquery
+function OnClic(x,y,menu, g)//функция обработки нажатия на кнопку меню (вызывается в основном коде при помощи jquery
 {
 	//alert('x='+x+' y='+y+' mx='+menu.mx+' my='+menu.my);
 	if(x>=menu.mx && x <=menu.mx+100)
 	{
+            SaveState(g);
 		alert('Menu');
-	}
+     	}
 }

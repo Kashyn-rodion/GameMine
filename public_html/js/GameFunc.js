@@ -1,3 +1,99 @@
+function CGameInfo(player, map)//конструктор структуры данных, которая сохраняет все данные об игре
+{
+   this.Player = player;
+   this.Map = map;
+}
+function SaveState(game)
+{
+    var str = '';
+    str+=game.Player.x.toString()+';';
+    str+=game.Player.y.toString()+';';
+    str+=game.Player.Energy.toString()+';';
+    str+=game.Player.rate.toString()+';';
+    str+=game.Player.kir.toString()+';';
+    str+=game.Player.tlimit.toString()+';';
+    //запишим объект Map
+    str+=game.Map.sx+';';
+    str+=game.Map.sy+';';
+    for(i=0;i<game.Map.sy;i++)
+    {
+        for(j=0;j<game.Map.sy;j++)        
+        {
+            str+=game.Map.blocs[i][j].toString()+';';            
+        }
+    }
+    localStorage.setItem('GameMine',str);
+}
+function GetVal(str, pos)
+{
+    var res;
+    tmp='';
+            while(str[pos]!=';'&& pos<str.length)
+            {
+                tmp+=str[pos];        
+                pos++;
+            }
+            pos++;
+     res = [parseInt(tmp),pos];
+    return res;
+ }
+function LoadState()
+{
+    var res;
+    var d = localStorage.getItem('GameMine');
+    if(d == null || d == undefined)
+    {
+      return null;
+    }
+    else
+    {
+        pos=0;
+        var tmp;
+        tmp=GetVal(d,pos);
+        x=tmp[0];
+        pos = tmp[1];
+        tmp=GetVal(d,pos);
+        y=tmp[0];
+        pos = tmp[1];
+        pl = new CPlayer(x,y);
+        tmp=GetVal(d,pos);
+        pl.Energy = tmp[0];
+        pos = tmp[1];  
+        tmp=GetVal(d,pos);
+        pl.rate = tmp[0];
+        pos = tmp[1];  
+        tmp=GetVal(d,pos);
+        pl.kir = tmp[0];
+        pos = tmp[1];  
+        tmp=GetVal(d,pos);
+        pl.tlimit = tmp[0];
+        pos = tmp[1];  
+        //считаем карту
+        tmp=GetVal(d,pos);
+        pos = tmp[1];  
+        x=tmp[0];
+        tmp=GetVal(d,pos);
+        pos = tmp[1];  
+        y=tmp[0];
+        map = new CMap(x,y);
+         map.blocs = new Array(y)
+         
+         for(i=0;i<y;i++)
+        {
+            map.blocs[i]=new Array(x);
+            for(j=0;j<x;j++)
+            {
+                tmp=GetVal(d,pos);
+                pos = tmp[1];  
+                map.blocs[i][j]=tmp[0];                
+            }
+        }
+        res = new CGameInfo(pl,map);
+         return res;
+     }
+        
+}
+
 function getRandomArbitary(min, max)
 {
     return Math.random() * (max - min) + min;
@@ -50,12 +146,12 @@ function YouWin(wnd)
     ctx.fillStyle = '#00FF00';
     ctx.fillText('You Win!!!', wnd.width / 4, wnd.height / 2);
 }
-function DrawMap(Map, wnd, player) // отрисовка карты
+function DrawMap(Map, wnd, cellSize, player) // отрисовка карты
 {
     //if(typeof(Map) != 'undefind')
     //{
-    wnd.width = Map.sx * 50;
-    wnd.height = Map.sy * 50;
+    wnd.width = Map.sx * cellSize;
+    wnd.height = Map.sy * cellSize;
 
     var ctx = wnd.getContext('2d');
     // ctx.drawImage(Map.img, 0,0,wnd.width,wnd.height);
@@ -68,30 +164,30 @@ function DrawMap(Map, wnd, player) // отрисовка карты
             switch (Map.blocs[i][j])
             {
                 case 0:
-                    ctx.drawImage(Map.fon, j * 50, i * 50, 50, 50);
+                    ctx.drawImage(Map.fon, j * cellSize, i * cellSize, cellSize, cellSize);
                     // alert('fon');
                     break;
                 case 1:
-                    ctx.drawImage(Map.bl, j * 50, i * 50, 50, 50);
+                    ctx.drawImage(Map.bl, j * cellSize, i * cellSize, cellSize, cellSize);
                     // alert('bl');
                     break;
                 case 2:
-                    ctx.drawImage(Map.bl2, j * 50, i * 50, 50, 50);
+                    ctx.drawImage(Map.bl2, j * cellSize, i * cellSize, cellSize, cellSize);
                     // alert('bl2');
                     break;
                 case 3:
-                    ctx.drawImage(Map.blg, j * 50, i * 50, 50, 50);
+                    ctx.drawImage(Map.blg, j * cellSize, i * cellSize, cellSize, cellSize);
                     // alert('blg');
                     break;
                 case 4:
-                    ctx.drawImage(Map.blk, j * 50, i * 50, 50, 50);
+                    ctx.drawImage(Map.blk, j * cellSize, i * cellSize, cellSize, cellSize);
                     // alert('blk');
                     break;
                 case 5:
                     if (player.rate >= targetRate)
-                        ctx.drawImage(Map.bldO, j * 50, i * 50, 50, 50);
+                        ctx.drawImage(Map.bldO, j * cellSize, i * cellSize, cellSize, cellSize);
                     else
-                        ctx.drawImage(Map.bld, j * 50, i * 50, 50, 50);
+                        ctx.drawImage(Map.bld, j * cellSize, i * cellSize, cellSize, cellSize);
                     // alert('bld');
                     break;
             }
@@ -164,64 +260,64 @@ function DrawPlayer(player, cellSize, wnd)
     //ctx.drawImage(player.img,player.x*cellSize,player.y*cellSize,cellSize,cellSize);
     DrawCapImg(ctx, player.img, player.x * cellSize, player.y * cellSize, cellSize, cellSize);
 }
-function PaintFrame()
+function PaintFrame(cellSize, game)
 {
     //alert('OnPaint');
     //
     var a;
-    if (targetX != Player.x)
+    if (targetX != game.Player.x)
     {
-        if (targetX < Player.x)
+        if (targetX < game.Player.x)
             a = -1;
         else
             a = 1;
-        if (Map.blocs[Player.y][Player.x + a] != 2)
+        if (game.Map.blocs[game.Player.y][game.Player.x + a] != 2)
         {
-            Player.x += a;
+            game.Player.x += a;
         }
         else
         {
-            targetX = Player.x;
+            targetX = game.Player.x;
         }
 
     }
     else
     {
-        if (targetY != Player.y)
+        if (targetY != game.Player.y)
         {
-            if (targetY < Player.y)
+            if (targetY < game.Player.y)
                 a = -1;
             else
                 a = 1;
-            if (Map.blocs[Player.y + a][Player.x] != 2)
+            if (game.Map.blocs[game.Player.y + a][game.Player.x] != 2)
             {
-                Player.y += a;
+                game.Player.y += a;
             }
             else
             {
-                targetY = Player.y;
+                targetY = game.Player.y;
             }
         }
     }
 
-    switch (Map.blocs[Player.y][Player.x])
+    switch (game.Map.blocs[game.Player.y][game.Player.x])
     {
         case 1:
             //alert('bloc 1');
-            Player.Energy -= 3;
-            Player.kir -= 5;
+            game.Player.Energy -= 3;
+            game.Player.kir -= 5;
             break;
         case 3:
-            Player.Energy -= 3;
-            Player.kir -= 5;
-            Player.rate += parseInt(getRandomArbitary(20, 200));
+            game.Player.Energy -= 3;
+            game.Player.kir -= 5;
+            game.Player.rate += parseInt(getRandomArbitary(20, 200));
             break;
         case 4:
-            Player.Energy -= 3;
-            Player.kir += parseInt(getRandomArbitary(5, 10));
+            game.Player.Energy -= 3;
+            game.Player.kir += parseInt(getRandomArbitary(5, 10));
             break;
         case 5:
-            if (Player.rate >= targetRate)
+            if (game.Player.rate >= targetRate)
             {
                 YouWin(example);
                 return;
@@ -229,23 +325,23 @@ function PaintFrame()
             break;
     }
 
-    if (Player.tlimit > 0)
+    if (game.Player.tlimit > 0)
     {
 
-        Player.tlimit -= 0.4;
-        if (Map.blocs[Player.y][Player.x] != 5)
-            Map.blocs[Player.y][Player.x] = 0;
-        DrawMap(Map, example, Player);
-        DrawWay(Player, 50, example, Map);
-        DrawPlayer(Player, 50, example);
+        game.Player.tlimit -= 0.4;
+        if (game.Map.blocs[game.Player.y][game.Player.x] != 5)
+            game.Map.blocs[game.Player.y][game.Player.x] = 0;
+        DrawMap(game.Map, example, cellSize, game.Player);
+        DrawWay(game.Player, cellSize, example, game.Map);
+        DrawPlayer(game.Player, cellSize, example);
     }
     else
     {
         //alert('ok');
-        Player.tlimit = 0;
+        game.Player.tlimit = 0;
         YouLose(example);
     }
-    DrawMenu(m_canv, Player, menu, 0, 0, 50 * Map.sx, 50);
+    DrawMenu(m_canv, game.Player, menu, 0, 0, cellSize * game.Map.sx, cellSize);
     //	alert('Player x='+Player.x + ' y='+Player.y);
 
 }
