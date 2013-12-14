@@ -21,7 +21,7 @@ function CMap(sX, sY)//конструктор карты
     this.blg.src = 'image/blg.jpg';
 
     this.bld = new Image();
-    this.bld.src = 'image/bld.jpg';
+    this.bld.src = 'image/blokD.jpg';
 
     this.bldO = new Image();
     this.bldO.src = 'image/blDO.jpg';
