@@ -54,6 +54,7 @@ function OnClic(x,y,menu, g)//функция обработки нажатия �
 	if(x>=menu.mx && x <=menu.mx+100)
 	{
             SaveState(g);
-		alert('Menu');
+		//alert('Menu');
+                document.location.href = "index.html";
      	}
 }
