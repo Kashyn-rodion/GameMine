@@ -294,6 +294,8 @@ function PaintFrame(cellSize, game)
     if(status==2)
     {
         YouWin(example,game.Player,infoimage);
+        OnStatClic(example.width,example.height,targetX*CellSize,targetY*CellSize);
+        return;
     }
   if(wait==0)
   {
@@ -372,6 +374,8 @@ function PaintFrame(cellSize, game)
             if (game.Player.rate >= targetRate)
             {
                // YouWin(example,game.Player,infoimage);
+               targetX=0;
+               targetY=0;
                status=2;
                 return;
             }
