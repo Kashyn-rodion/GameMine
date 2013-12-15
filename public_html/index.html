@@ -14,14 +14,10 @@
         <script src="js/GameFunc.js"></script>
         <script src="js/DrawInfo.js"></script>
     <script>
-                //блокирование скролинга
-                document.body.addEventListener('touchmove',function(event) {event.preventDefault();},false);
-    var status=0;//0 - game, 1 - lose, 2 - win;            
-    var infoimage= new CStat();
-                var CellSize = 50;	
-                var Game=null;
+		var CellSize = 50;	
+                var Game;
 	        var targetRate = 200;
-                Game=LoadState();
+   Game=LoadState();
                 if(Game==null)
                 {
 		var Map = new CMap(10,10);

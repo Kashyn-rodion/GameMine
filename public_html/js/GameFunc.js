@@ -259,17 +259,14 @@ function DrawWay(player, cellSize, wnd, Map)
 function DrawPlayer(player, cellSize, way, wnd)
 {
     var ctx = wnd.getContext('2d');
-    if(way)
-        ctx.drawImage(player.img,player.x*cellSize,player.y*cellSize,cellSize,cellSize);
-    else
-    {
-       flipImage(player.img,player.x*cellSize,player.y*cellSize,cellSize,cellSize,ctx,-1,0);
-    }
-//    DrawCapFlipImg(ctx, player.img, player.x * cellSize, player.y * cellSize, cellSize, cellSize);
+    //ctx.drawImage(player.img,player.x*cellSize,player.y*cellSize,cellSize,cellSize);
+    DrawCapImg(ctx, player.img, player.x * cellSize, player.y * cellSize, cellSize, cellSize);
 }
 function PaintFrame(cellSize, game)
 {
-    if(window.innerWidth<window.innerHeight)
+    //alert('OnPaint');
+    //
+      if(window.innerWidth<window.innerHeight)
                 {
                     if(game.Map.sx>game.Map.sy)
                        CellSize = window.innerWidth/(game.Map.sx+1.5);
@@ -284,31 +281,13 @@ function PaintFrame(cellSize, game)
                        CellSize = window.innerHeight/(game.Map.sy+1.5);
                }
                 CellSize=parseInt(CellSize);
-    example.width = CellSize*game.Map.sx;
-    example.height = CellSize*game.Map.sy;
-       DrawMenu(m_canv, game.Player, menu, 0, 0, cellSize * game.Map.sx, cellSize);
-    if(status==1)
-    {     
-        YouLose(example);
-    }
-    if(status==2)
-    {
-        YouWin(example,game.Player,infoimage);
-    }
-    var way=true;
     var a;
     if (targetX != game.Player.x)
     {
         if (targetX < game.Player.x)
-        {
             a = -1;
-            way=false;
-        }
         else
-        {
             a = 1;
-            way = true;
-        }
         if (game.Map.blocs[game.Player.y][game.Player.x + a] != 2)
         {
             game.Player.x += a;
@@ -324,15 +303,9 @@ function PaintFrame(cellSize, game)
         if (targetY != game.Player.y)
         {
             if (targetY < game.Player.y)
-            {
                 a = -1;
-                way=false;
-            }
             else
-            {
                 a = 1;
-                way = true;
-            }
             if (game.Map.blocs[game.Player.y + a][game.Player.x] != 2)
             {
                 game.Player.y += a;
@@ -361,7 +334,7 @@ function PaintFrame(cellSize, game)
             game.Player.kir += parseInt(getRandomArbitary(5, 10));
             break;
         case 5:
-            if (game.Player.rate >= targetRate)
+            if (game.Player.rate >= game.targetRate)
             {
                // YouWin(example,game.Player,infoimage);
                status=2;
@@ -378,16 +351,15 @@ function PaintFrame(cellSize, game)
             game.Map.blocs[game.Player.y][game.Player.x] = 0;
         DrawMap(game.Map, example, cellSize, game.Player);
         DrawWay(game.Player, cellSize, example, game.Map);
-        DrawPlayer(game.Player, cellSize,way ,example);
+        DrawPlayer(game.Player, cellSize, example);
     }
     else
     {
         //alert('ok');
         game.Player.tlimit = 0;
-        //YouLose(example);
-        status=1;
+        YouLose(example);
     }
-    //DrawMenu(m_canv, game.Player, menu, 0, 0, cellSize * game.Map.sx, cellSize);
+    DrawMenu(m_canv, game.Player, menu, 0, 0, cellSize * game.Map.sx, cellSize);
     //	alert('Player x='+Player.x + ' y='+Player.y);
    
 }
