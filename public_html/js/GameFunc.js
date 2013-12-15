@@ -264,6 +264,21 @@ function PaintFrame(cellSize, game)
 {
     //alert('OnPaint');
     //
+      if(window.innerWidth<window.innerHeight)
+                {
+                    if(game.Map.sx>game.Map.sy)
+                       CellSize = window.innerWidth/(game.Map.sx+1.5);
+                   else
+                       CellSize = window.innerWidth/(game.Map.sy+1.5);
+                }
+                else
+                {
+                    if(game.Map.sx>game.Map.sy)
+                       CellSize = window.innerHeight/(game.Map.sx+1.5);
+                   else
+                       CellSize = window.innerHeight/(game.Map.sy+1.5);
+               }
+                CellSize=parseInt(CellSize);
     var a;
     if (targetX != game.Player.x)
     {

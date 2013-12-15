@@ -14,34 +14,37 @@ function DrawMenu(wnd, player, menu, x, y, w, h)
 	wnd.height = h;
 	menu.w=w;
 	menu.h=h;
-	var space = w/5-100;
+        var bs = w/6;
+        var tx=bs*0.37,ty=bs*0.32;
+	var space =bs*0.2;
 	var ctx = wnd.getContext('2d');
-	ctx.font="16px Verdana";
+        var fsize=bs*0.17;
+	ctx.font=fsize.toString()+"px Verdana";
 	ctx.fillStyle = '#FF0000';
-	var cur=0;
-	var str;
+	var cur=space/2;
+        var str;
 	//рисуем фон
 	ctx.drawImage(menu.img, 0,0,1,1,x,y,w,h);
 	//рисуем жизни
-	ctx.drawImage(menu.img, 0,0,100,50,cur,y,100,h);
-	ctx.fillText(player.Energy,cur+30,y+32);
-	cur+=100+space;
+	ctx.drawImage(menu.img, 0,0,100,50,cur,y,bs,h);
+	ctx.fillText(player.Energy,cur+tx,y+ty);
+	cur+=bs+space;
 	//рисуем очки
-	ctx.drawImage(menu.img, 100,0,100,50,cur,y,100,h);
-	ctx.fillText(player.rate,cur+37,y+32);
-	cur+=100+space;
+	ctx.drawImage(menu.img, 100,0,100,50,cur,y,bs,h);
+	ctx.fillText(player.rate,cur+tx,y+ty);
+	cur+=bs+space;
 	//рисуем энергию
-	ctx.drawImage(menu.img, 200,0,100,50,cur,y,100,h);
-	ctx.fillText(player.kir.toString(),cur+37,y+32);
-	cur+=100+space;
+	ctx.drawImage(menu.img, 200,0,100,50,cur,y,bs,h);
+	ctx.fillText(player.kir.toString(),cur+tx,y+ty);
+	cur+=bs+space;
 	//рисуем время
 	str = player.tlimit.toString();
 	str = str.substring(0, 4);
-	ctx.drawImage(menu.img, 300,0,100,50,cur,y,100,h);
-	ctx.fillText(str,cur+37,y+32);
-	cur+=100+space;
+	ctx.drawImage(menu.img, 300,0,100,50,cur,y,bs,h);
+	ctx.fillText(str,cur+tx,y+ty);
+	cur+=bs+space;
 	//рисуем кнопку меню
-	ctx.drawImage(menu.img, 400,0,100,50,cur,y,100,h);
+	ctx.drawImage(menu.img, 400,0,100,50,cur,y,bs,h);
 	menu.mx = cur;
 	menu.my = y;
 }
