@@ -1,0 +1,41 @@
+<!doctype html> 
+<html>
+<meta charset='utf-8'>
+  <head>
+	<title>Game</title>
+	<link href="css/style.css" type="text/css" rel="stylesheet">
+  </head>
+    <body id = "fon" align = 'center'>
+        <canvas id='canv'>Обновите браузер</canvas>
+	<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+	<script src="js/ImgProc.js"></script>
+	<script src="js/StartScreen.js"></script>
+    <script>
+                //блокирование скролинга
+                document.body.addEventListener('touchmove',function(event) {event.preventDefault();},false);
+                var canv = document.getElementById('canv');
+                var m = new CLevels();
+                
+       tID = setInterval(function(){DrawMainMenu(canv,0,0,window.innerWidth,window.innerHeight);}, 100);
+    $(document.canv).on("touchend", function(e) {
+       e.changedTouches[0].pageX;
+       var offset = jQuery('#canv').offset();
+       var x = offset.left;
+       var y = offset.top;
+       var targetX = parseInt((e.changedTouches[0].pageX-x));
+       var targetY = parseInt((e.changedTouches[0].pageY-y));
+       OnClic_Levels(m,targetX,targetY);
+        });
+      
+      $('#canv').click(function(eventObject)
+		{
+			var offset = jQuery('#canv').offset();
+			var x = offset.left;
+			var y = offset.top;
+			var targetX = parseInt((eventObject.pageX-x));
+			var targetY = parseInt((eventObject.pageY-y));
+                        OnClic_Levels(m,targetX,targetY);
+		});
+    </script>
+  </body>
+</html>

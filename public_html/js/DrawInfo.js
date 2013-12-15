@@ -27,4 +27,20 @@ function ShowStatistic(ctx, cstat, x, y, w, h, player)
         ctx.fillText(str,dx+dw/2,dy+dh*0.79);
         
 }
+function OnStatClic(w,h,x,y)
+{
+    var bx=w*0.39;
+    var by=h*0.68;
+    var bh=h*0.077;
+    var bw=w*0.238;
+    if(x>bx && x<bx+bw)
+    {
+        if(y>by && y<by+bh)
+        {
+           // alert("All right");    
+           document.location.href = "Levels.html";
+        }
+    }
+}
+    
 
