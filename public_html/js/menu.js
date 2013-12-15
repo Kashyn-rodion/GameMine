@@ -55,6 +55,6 @@ function OnClic(x,y,menu, g)//функция обработки нажатия �
 	{
             SaveState(g);
 		//alert('Menu');
-                document.location.href = "index.html";
+                document.location.href = "Menu.html";
      	}
 }

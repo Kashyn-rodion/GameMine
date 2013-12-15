@@ -295,6 +295,8 @@ function PaintFrame(cellSize, game)
     {
         YouWin(example,game.Player,infoimage);
     }
+  if(wait==0)
+  {
     var way=true;
     var a;
     if (targetX != game.Player.x)
@@ -350,15 +352,21 @@ function PaintFrame(cellSize, game)
             //alert('bloc 1');
             game.Player.Energy -= 3;
             game.Player.kir -= 5;
+            wait=2;
+            break;
+        case 2:
+            wait=0;
             break;
         case 3:
             game.Player.Energy -= 3;
             game.Player.kir -= 5;
             game.Player.rate += parseInt(getRandomArbitary(20, 200));
+            wait=2;
             break;
         case 4:
             game.Player.Energy -= 3;
             game.Player.kir += parseInt(getRandomArbitary(5, 10));
+            wait=2;
             break;
         case 5:
             if (game.Player.rate >= targetRate)
@@ -369,7 +377,9 @@ function PaintFrame(cellSize, game)
             }
             break;
     }
-
+    }
+    else
+        wait--;
     if (game.Player.tlimit > 0)
     {
 

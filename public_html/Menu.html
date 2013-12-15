@@ -14,7 +14,7 @@
                 //блокирование скролинга
                 document.body.addEventListener('touchmove',function(event) {event.preventDefault();},false);
                 var canv = document.getElementById('canv');
-                var m = new CMainMenu();
+                var m = new CMenu();
                 
        tID = setInterval(function(){DrawMainMenu(canv,0,0,window.innerWidth,window.innerHeight);}, 100);
     $(document.canv).on("touchend", function(e) {
@@ -24,7 +24,7 @@
        var y = offset.top;
        var targetX = parseInt((e.changedTouches[0].pageX-x));
        var targetY = parseInt((e.changedTouches[0].pageY-y));
-       OnClic_MainMenu(m,targetX,targetY);
+       OnClic_Menu(m,targetX,targetY);
         });
       
       $('#canv').click(function(eventObject)
@@ -34,7 +34,7 @@
 			var y = offset.top;
 			var targetX = parseInt((eventObject.pageX-x));
 			var targetY = parseInt((eventObject.pageY-y));
-                        OnClic_MainMenu(m,targetX,targetY);
+                        OnClic_Menu(m,targetX,targetY);
 		});
     </script>
   </body>

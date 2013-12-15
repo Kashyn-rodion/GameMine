@@ -21,7 +21,7 @@
                 var CellSize = 50;	
                 var Game=null;
 	        var targetRate = 200;
-                Game=LoadState();
+             //   Game=LoadState();
                 if(Game==null)
                 {
 		var Map = new CMap(10,10);
@@ -41,6 +41,7 @@ var m_canv = document.getElementById('menu_canv');
 var menu = new CMenu();
 //DrawMap(Map,example,Player);
 //DrawPlayer(Player,50,example);
+var wait=0;
 tID = setInterval(function(){PaintFrame(CellSize, Game);}, 400);
 		
 		//DrawMap(Map,example);
