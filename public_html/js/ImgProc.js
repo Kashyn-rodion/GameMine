@@ -25,3 +25,14 @@ function DrawCapImg(wnd, img, x, y, w, h)
 	}
  	wnd.putImageData(wndData, x, y);
 }
+function flipImage(image,x,y,width,height, ctx, flipH, flipV) 
+{
+    var scaleH = flipH ? -1 : 1, // Set horizontal scale to -1 if flip horizontal
+        scaleV = flipV ? -1 : 1, // Set verical scale to -1 if flip vertical
+        posX = flipH ? (width+x) * -1 : x, // Set x position to -100% if flip horizontal 
+        posY = flipV ? (height+y) * -1 : y; // Set y position to -100% if flip vertical
+    ctx.save(); // Save the current state
+    ctx.scale(scaleH, scaleV); // Set scale to flip the image
+    ctx.drawImage(image, posX, posY, width, height); // draw the image
+    ctx.restore(); // Restore the last saved state
+};
